@@ -1,0 +1,13 @@
+version: '3'
+services:
+  lndconnect:
+    image: lndconnect:latest
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - /your/path/to/lnd:/root/.lnd/
+    command:
+      - lndconnect
+      - -j
+      - --host=YOUR_IP_ADDRESS

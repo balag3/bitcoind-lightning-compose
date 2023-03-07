@@ -1,0 +1,45 @@
+version: '3'
+services:
+  btc:
+    container_name: btc
+    image: bitcoind-23.0:latest
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+      args:
+        - TARGETPLATFORM=linux/amd64
+    restart: always
+    expose:
+      - "8333"
+      - "28333"
+      - "28332"
+      - "18333"
+      - "18332"
+      - "18532"
+    environment:
+      - BITCOIN_DATA=/home/bitcoin/.bitcoin
+    volumes:
+      - ./bitcoin.conf:/home/bitcoin/.bitcoin/bitcoin.conf
+      - /your/path/to/bitcoin_data:/home/bitcoin/.bitcoin
+    ports:
+      - '8332:8332'
+      - '8333:8333'
+      - "28333:28333"
+      - "28332:28332"
+      - "18333:18333"
+      - "18332:18332"
+      - "18443:18443"
+  lnd:
+    image: lightninglabs/lnd:v0.15.5-beta
+    container_name: lnd
+    restart: always
+    ports:
+      - "10009:10009"
+      - "9009:9735"
+      - "9735:9735"
+    volumes:
+      - ./lnd.conf:/root/.lnd/lnd.conf
+      - /your/path/to/bitcoin_data:/root/.bitcoin/
+      - /your/path/to/lnd:/root/.lnd/
+    command:
+      --noseedbackup
